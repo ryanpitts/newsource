@@ -12,6 +12,7 @@ from django.template.defaultfilters import striptags, truncatewords
 
 from caching.base import CachingManager, CachingMixin
 from sorl.thumbnail import ImageField
+from source.base.utils import disable_for_loaddata
 from source.people.models import Person, Organization
 from source.tags.models import TechnologyTaggedItem, ConceptTaggedItem
 from source.utils.caching import expire_page_cache
@@ -53,8 +54,8 @@ class Code(CachingMixin, models.Model):
     class Meta:
         ordering = ('slug',)
         
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return '%s' % self.name
     
     def save(self, *args, **kwargs):
         # GitHub API does not like trailing slashes on repo links,
@@ -162,11 +163,12 @@ class CodeLink(CachingMixin, models.Model):
         ordering = ('code', 'name',)
         verbose_name = 'Code Link'
 
-    def __unicode__(self):
-        return u'%s: %s' % (self.code.name, self.name)
+    def __str__(self):
+        return '%s: %s' % (self.code.name, self.name)
 
 
 @receiver(post_save, sender=Code)
+@disable_for_loaddata
 def clear_caches_for_code(sender, instance, **kwargs):
     # clear cache for code detail page
     expire_page_cache(instance.get_absolute_url())

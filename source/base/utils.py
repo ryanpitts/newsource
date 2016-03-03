@@ -1,4 +1,5 @@
 import json
+from functools import wraps
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -24,3 +25,12 @@ def render_json_to_response(context):
     '''
     result = json.dumps(context, sort_keys=False, indent=4)
     return HttpResponse(result, mimetype='application/javascript')
+
+def disable_for_loaddata(signal_handler):
+    @wraps(signal_handler)
+    def wrapper(*args, **kwargs):
+        if kwargs['raw']:
+            print("Skipping signal for {0} {1}".format(args, kwargs))
+            return
+        signal_handler(*args, **kwargs)
+    return wrapper

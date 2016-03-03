@@ -9,6 +9,7 @@ from django.template.defaultfilters import date as dj_date, linebreaks, striptag
 
 from caching.base import CachingManager, CachingMixin
 from sorl.thumbnail import ImageField
+from source.base.utils import disable_for_loaddata
 from source.articles.models import Article
 from source.utils.caching import expire_page_cache
 
@@ -37,8 +38,8 @@ class Guide(CachingMixin, models.Model):
     class Meta:
         ordering = ('-pubdate','title',)
         
-    def __unicode__(self):
-        return u'%s' % self.title
+    def __str__(self):
+        return '%s' % self.title
         
     @models.permalink
     def get_absolute_url(self):
@@ -103,12 +104,12 @@ class GuideArticle(CachingMixin, models.Model):
         ordering = ('guide', 'order',)
         verbose_name = 'Guide Article'
 
-    def __unicode__(self):
+    def __str__(self):
         if self.article:
             name = self.article.title
         else:
             name = self.external_title
-        return u'%s: %s' % (self.guide.title, name)
+        return '%s: %s' % (self.guide.title, name)
 
     @models.permalink
     def get_absolute_url(self):
@@ -123,6 +124,7 @@ class GuideArticle(CachingMixin, models.Model):
 
 
 @receiver(post_save, sender=Guide)
+@disable_for_loaddata
 def clear_caches_for_guide(sender, instance, **kwargs):
     # clear cache for guide detail page
     expire_page_cache(instance.get_absolute_url())

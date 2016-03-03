@@ -9,6 +9,7 @@ from django.template.defaultfilters import date as dj_date, linebreaks, removeta
 
 from caching.base import CachingManager, CachingMixin
 from sorl.thumbnail import ImageField
+from source.base.utils import disable_for_loaddata
 from source.code.models import Code
 from source.people.models import Person, Organization
 from source.tags.models import TechnologyTaggedItem, ConceptTaggedItem
@@ -53,8 +54,8 @@ class Article(CachingMixin, models.Model):
     class Meta:
         ordering = ('-pubdate','title',)
         
-    def __unicode__(self):
-        return u'%s' % self.title
+    def __str__(self):
+        return '%s' % self.title
         
     @models.permalink
     def get_absolute_url(self):
@@ -117,7 +118,7 @@ class Article(CachingMixin, models.Model):
         return self.code.filter(is_live=True)
         
     def get_live_guide_set(self):
-        return self.guidearticle_set.filter(guide__is_live=True, guide__show_in_lists=True, guide__pubdate__lte=datetime.now)
+        return self.guidearticle_set.filter(guide__is_live=True, guide__show_in_lists=True, guide__pubdate__lte=datetime.now())
 
     def get_live_author_bio_set(self):
         # only authors with acutal bio information
@@ -153,8 +154,8 @@ class ArticleBlock(CachingMixin, models.Model):
         ordering = ('article', 'order', 'title',)
         verbose_name = 'Article Block'
 
-    def __unicode__(self):
-        return u'%s: %s' % (self.article.title, self.title)
+    def __str__(self):
+        return '%s: %s' % (self.article.title, self.title)
 
     @property
     def pretty_caption(self):
@@ -177,6 +178,7 @@ class ArticleBlock(CachingMixin, models.Model):
 
 
 @receiver(post_save, sender=Article)
+@disable_for_loaddata
 def clear_caches_for_article(sender, instance, **kwargs):
     # clear cache for article detail page
     expire_page_cache(instance.get_absolute_url())
@@ -236,8 +238,8 @@ class Section(CachingMixin, models.Model):
     class Meta:
         ordering = ('name',)
 
-    def __unicode__(self):
-        return u'%s' % (self.name)
+    def __str__(self):
+        return '%s' % (self.name)
 
 
 class Category(CachingMixin, models.Model):
@@ -252,5 +254,5 @@ class Category(CachingMixin, models.Model):
         ordering = ('section', 'name',)
         verbose_name_plural = 'Categories'
 
-    def __unicode__(self):
-        return u'%s: %s' % (self.section.name, self.name)
+    def __str__(self):
+        return '%s: %s' % (self.section.name, self.name)

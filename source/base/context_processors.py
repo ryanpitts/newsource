@@ -25,3 +25,9 @@ def warnr(request):
         'APP_STAGE': stage,
         'APP_MSG': message
     }
+
+def globals(request):
+    return {
+        'request': request,
+        'settings': settings
+    }

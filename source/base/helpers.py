@@ -10,7 +10,7 @@ from django.template.defaultfilters import linebreaks as django_linebreaks,\
 from django.utils.encoding import force_text
 from django.utils.timesince import timesince
 
-from jingo import register
+from django_jinja import library
 from jinja2 import Markup
 from sorl.thumbnail import get_thumbnail
 from typogrify.filters import typogrify as dj_typogrify,\
@@ -18,35 +18,35 @@ from typogrify.filters import typogrify as dj_typogrify,\
 
 logger = logging.getLogger('base.helpers')
 
-@register.filter
+@library.filter
 def typogrify(string):
     return Markup(dj_typogrify(string))
 
-@register.filter
+@library.filter
 def smartypants(string):
     return Markup(dj_smartypants(string))
 
-@register.filter
+@library.filter
 def linebreaks(string):
     return django_linebreaks(string)
 
-@register.filter
+@library.filter
 def escapejs(string):
     return django_escapejs(string)
 
-@register.function
+@library.global_function
 def get_timestamp():
     return datetime.datetime.now()
     
-@register.filter
+@library.filter
 def dj_pluralize(string, arg='s'):
     return django_pluralize(string, arg)
 
-@register.function
+@library.global_function
 def dj_date(value, format_string):
     return django_date(value, format_string)
 
-@register.function
+@library.global_function
 def thumbnail(source, *args, **kwargs):
     """
     Wraps sorl thumbnail with an additional 'default' keyword
@@ -72,7 +72,7 @@ def thumbnail(source, *args, **kwargs):
         source = getattr(settings, 'DEFAULT_IMAGE_SRC')
         return get_thumbnail(source, *args, **kwargs)
 
-@register.filter
+@library.filter
 def dj_intcomma(value):
     """
     https://github.com/django/django/blob/master/django/contrib/humanize/templatetags/humanize.py
@@ -86,7 +86,7 @@ def dj_intcomma(value):
     else:
         return dj_intcomma(new)
         
-@register.filter
+@library.filter
 def simple_timesince(value):
     now = datetime.datetime.now()
     try:
@@ -98,7 +98,7 @@ def simple_timesince(value):
         return 'just now'
     return '%(time)s ago' % {'time': timesince(value).split(', ')[0]}
     
-@register.filter
+@library.filter
 def simple_datesince(value):
     today = datetime.datetime.now().date()
     try:

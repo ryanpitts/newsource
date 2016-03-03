@@ -4,7 +4,7 @@ import json
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
-from django.core.urlresolvers import resolve
+from django.core.urlresolvers import resolve, reverse
 from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, Http404
 from django.utils.cache import get_cache_key
 from django.utils.decorators import method_decorator
@@ -13,11 +13,40 @@ from django.utils.translation import get_language
 from django.views.generic import View
 
 from .json import LazyEncoder
+from threading import local
 
+_local = local()
+
+def get_url_prefix():
+    """Get the prefix for the current thread, or None."""
+    return getattr(_local, 'prefix', None)
+    
+def reverse_with_locale(viewname, urlconf=None, args=None, kwargs=None, prefix=None):
+    """Wraps Django's reverse to prepend the correct locale."""
+    prefixer = get_url_prefix()
+
+    if prefixer:
+        prefix = prefix or '/'
+    url = reverse(viewname, urlconf, args, kwargs, prefix)
+    if prefixer:
+        url = prefixer.fix(url)
+
+    # Ensure any unicode characters in the URL are escaped.
+    return iri_to_uri(url)
 
 def expire_page_cache(path, key_prefix=None):
     # pass the path through funfactory resolver in order to get locale
     resolved_path = resolve(path)
+
+    path_with_locale = reverse_with_locale(
+        resolved_path.func,
+        args = resolved_path.args,
+        kwargs = resolved_path.kwargs
+    )
+    try:
+        language = urlresolvers.split_path(path_with_locale)[0].lower()
+    except:
+        language = None
 
     # get cache key, expire if the cached item exists
     key = get_url_cache_key(

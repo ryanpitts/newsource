@@ -47,8 +47,8 @@ class Job(CachingMixin, models.Model):
     class Meta:
         ordering = ('organization','slug',)
     
-    def __unicode__(self):
-        return u'%s: %s' % (self.name, self.organization)
+    def __str__(self):
+        return '%s: %s' % (self.name, self.organization)
 
     def will_show_on_site(self):
         today = get_today()

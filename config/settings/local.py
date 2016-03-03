@@ -8,12 +8,13 @@ Local settings
 - Add django-extensions as app
 '''
 
-from .common import *  # noqa
+from .common import *
 
 # DEBUG
 # ------------------------------------------------------------------------------
 DEBUG = env.bool('DJANGO_DEBUG', default=True)
 TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
+TEMPLATES[1]['OPTIONS']['debug'] = DEBUG
 
 # SECRET CONFIGURATION
 # ------------------------------------------------------------------------------

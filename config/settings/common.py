@@ -14,7 +14,6 @@ import environ
 
 ROOT_DIR = environ.Path(__file__) - 3  # (/a/b/myfile.py - 3 = /)
 APPS_DIR = ROOT_DIR.path('source')
-PROJECT_MODULE = 'source'
 
 env = environ.Env()
 
@@ -32,27 +31,27 @@ DJANGO_APPS = (
     'django.contrib.sites',
     'django.contrib.staticfiles',
 )
+LOCAL_APPS = (
+    'source.base',
+    'source.articles',
+    'source.code',
+    'source.guides',
+    'source.jobs',
+    'source.people',
+    'source.tags',
+)
 THIRD_PARTY_APPS = (
     'caching',
     'haystack',
     'sorl.thumbnail',
     'taggit',
     'django_browserid',
-)
-
-# Apps specific for this project go here.
-LOCAL_APPS = (
-    '%s.base' % PROJECT_MODULE,
-    '%s.articles' % PROJECT_MODULE,
-    '%s.code' % PROJECT_MODULE,
-    '%s.guides' % PROJECT_MODULE,
-    '%s.jobs' % PROJECT_MODULE,
-    '%s.people' % PROJECT_MODULE,
-    '%s.tags' % PROJECT_MODULE,
+    'django_jinja',
+    'compressor',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -136,7 +135,34 @@ USE_TZ = True
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#templates
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 TEMPLATES = [
+    {
+        'BACKEND': 'django_jinja.backend.Jinja2',
+        'DIRS': [
+            str(APPS_DIR + app.split('.')[1] + 'templates') for app in LOCAL_APPS
+        ],
+        'OPTIONS': {
+            'debug': DEBUG,
+            'match_extension': '.html',
+            'auto_reload': DEBUG,
+            'extensions': DEFAULT_EXTENSIONS + [
+                'compressor.contrib.jinja2ext.CompressorExtension'
+            ],
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'django_browserid.context_processors.browserid',
+                'source.base.context_processors.globals',
+            ],
+        }
+    },
     {
         # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -164,10 +190,12 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'django_browserid.context_processors.browserid',
+                'source.base.context_processors.globals',
             ],
         },
     },
 ]
+KEEP_DJANGO_TEMPLATES = ['admin', 'debug_toolbar']
 
 # STATIC FILE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -186,6 +214,13 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_ROOT = STATIC_ROOT
+COMPRESS_CSS_FILTERS = (
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter'
 )
 
 # MEDIA CONFIGURATION
@@ -210,7 +245,7 @@ AUTHENTICATION_BACKENDS = (
     #'allauth.account.auth_backends.AuthenticationBackend',
     'django_browserid.auth.BrowserIDBackend',
 )
-BROWSERID_CREATE_USER = '%s.people.utils.create_auth_user' % PROJECT_MODULE
+BROWSERID_CREATE_USER = 'source.people.utils.create_auth_user'
 LOGIN_REDIRECT_URL = '/organizations/update/'
 
 # SLUGLIFIER
@@ -249,3 +284,6 @@ GITHUB_CLIENT_ID = env.str("GITHUB_CLIENT_ID", None)
 GITHUB_CLIENT_SECRET = env.str("GITHUB_CLIENT_SECRET", None)
 
 SLACK_TOKEN = env.str("SLACK_TOKEN", None)
+
+# sorl-thumbnail settings
+DEFAULT_IMAGE_SRC = 'img/missing.png'

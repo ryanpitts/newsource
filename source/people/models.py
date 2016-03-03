@@ -1,3 +1,4 @@
+import requests
 from datetime import datetime
 
 from django.conf import settings
@@ -7,8 +8,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from caching.base import CachingManager, CachingMixin
-import requests
 from sorl.thumbnail import ImageField
+from source.base.utils import disable_for_loaddata
 from source.utils.caching import expire_page_cache
 
 class LivePersonManager(CachingManager):
@@ -40,8 +41,8 @@ class Person(CachingMixin, models.Model):
         ordering = ('last_name', 'first_name',)
         verbose_name_plural = 'People'
         
-    def __unicode__(self):
-        return u'%s %s' % (self.first_name, self.last_name)
+    def __str__(self):
+        return '%s %s' % (self.first_name, self.last_name)
         
     def save(self, *args, **kwargs):
         # clean up our username fields, just in case
@@ -94,8 +95,8 @@ class PersonLink(CachingMixin, models.Model):
         ordering = ('person', 'name',)
         verbose_name = 'Person Link'
 
-    def __unicode__(self):
-        return u'%s: %s' % (self.person.name, self.name)
+    def __str__(self):
+        return '%s: %s' % (self.person.name, self.name)
 
 
 
@@ -131,8 +132,8 @@ class Organization(CachingMixin, models.Model):
     class Meta:
         ordering = ('name',)
         
-    def __unicode__(self):
-        return u'%s' % self.name
+    def __str__(self):
+        return '%s' % self.name
         
     def save(self, *args, **kwargs):
         # clean up our username fields, just in case
@@ -192,11 +193,12 @@ class OrganizationLink(CachingMixin, models.Model):
         ordering = ('organization', 'name',)
         verbose_name = 'Organization Link'
 
-    def __unicode__(self):
-        return u'%s: %s' % (self.organization.name, self.name)
+    def __str__(self):
+        return '%s: %s' % (self.organization.name, self.name)
 
 
 @receiver(post_save, sender=Person)
+@disable_for_loaddata
 def clear_caches_for_person(sender, instance, **kwargs):
     # clear cache for person detail page
     expire_page_cache(instance.get_absolute_url())
@@ -241,6 +243,7 @@ def clear_caches_for_person(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Organization)
+@disable_for_loaddata
 def clear_caches_for_organization(sender, instance, **kwargs):
     # clear cache for organization detail page
     expire_page_cache(instance.get_absolute_url())

@@ -8,16 +8,20 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 
-urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='pages/home.html'), name="home"),
-    url(r'^about/$', TemplateView.as_view(template_name='pages/about.html'), name="about"),
+from source.base import urls
 
+urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, include(admin.site.urls)),
-
-    # Your stuff: custom urls includes go here
-
-
+    url(r'^browserid/', include('django_browserid.urls')),
+    # Generate a robots.txt
+    url(r'^robots.txt$',
+        lambda r: HttpResponse(
+            "User-agent: *\n%s: /" % ('Allow' if settings.ENGAGE_ROBOTS else 'Disallow') ,
+            mimetype="text/plain"
+        )
+    ),
+    url(r'', include(urls.BASE_URLS)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
