@@ -16,7 +16,7 @@
     </div>
     <p>{{ error_message }}</p>
 
-{% elif user.is_authenticated() and user.is_active and perms.people.change_organization %}
+{% elif user.is_authenticated() and user.is_active and 'people.change_organization' in perms %}
 <div class="toggle-buttons">
     <a href="#organization" class="active">Your organization</a>
     <a href="#people">Your people</a>
