@@ -29,7 +29,7 @@ class Job(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     is_live = models.BooleanField('Display on site', default=True, help_text='Job will display if this is checked and dates are within proper range')
-    organization = models.ForeignKey(Organization, blank=True, null=True)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, blank=True, null=True)
     name = models.CharField('Job name', max_length=128)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)

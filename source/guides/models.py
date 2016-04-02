@@ -92,8 +92,8 @@ class Guide(CachingMixin, models.Model):
 class GuideArticle(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    guide = models.ForeignKey(Guide)
-    article = models.ForeignKey(Article, blank=True, null=True)
+    guide = models.ForeignKey(Guide, on_delete=models.CASCADE)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, blank=True, null=True)
     external_url = models.URLField(blank=True, null=True, help_text='Paste a URL here to link to an article elsewhere (overrides `Article` URL above).')
     external_title = models.CharField(max_length=128, blank=True, help_text='Display title for link to article elsewhere (overrides `Article` title above).')
     order = models.PositiveIntegerField(default=1, blank=True, db_index=True, help_text="A '1' will appear first, a '2' will appear second, and so on.")

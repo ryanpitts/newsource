@@ -154,7 +154,7 @@ class Code(CachingMixin, models.Model):
 class CodeLink(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    code = models.ForeignKey(Code)
+    code = models.ForeignKey(Code, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     url = models.URLField()
     objects = models.Manager()

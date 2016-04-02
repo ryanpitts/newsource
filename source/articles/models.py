@@ -38,7 +38,7 @@ class Article(CachingMixin, models.Model):
     body = models.TextField()
     summary = models.TextField()
     article_type = models.CharField(max_length=32, blank=True)
-    category = models.ForeignKey('Category')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
     people = models.ManyToManyField(Person, blank=True)
     organizations = models.ManyToManyField(Organization, blank=True)
     code = models.ManyToManyField(Code, blank=True)
@@ -139,7 +139,7 @@ IMAGE_PRESENTATION_CHOICES = (
 class ArticleBlock(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    article = models.ForeignKey(Article)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
     title = models.CharField(max_length=128)
     slug = models.SlugField()
     order = models.PositiveIntegerField(default=1)
@@ -245,7 +245,7 @@ class Section(CachingMixin, models.Model):
 class Category(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    section = models.ForeignKey(Section)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE)
     name = models.CharField(max_length=64)
     slug = models.SlugField()
     objects = models.Manager()

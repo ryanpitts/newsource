@@ -86,7 +86,7 @@ class Person(CachingMixin, models.Model):
 class PersonLink(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    person = models.ForeignKey(Person)
+    person = models.ForeignKey(Person, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     url = models.URLField()
     objects = models.Manager()
@@ -184,7 +184,7 @@ class Organization(CachingMixin, models.Model):
 class OrganizationLink(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    organization = models.ForeignKey(Organization)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     name = models.CharField(max_length=128)
     url = models.URLField()
     objects = models.Manager()

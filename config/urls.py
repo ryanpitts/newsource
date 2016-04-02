@@ -11,8 +11,7 @@ from django.views import defaults as default_views
 from source.base import urls
 
 urlpatterns = [
-    # Django Admin, use {% url 'admin:index' %}
-    url(settings.ADMIN_URL, include(admin.site.urls)),
+    url(settings.ADMIN_URL, admin.site.urls),
     url(r'^browserid/', include('django_browserid.urls')),
     # Generate a robots.txt
     url(r'^robots.txt$',

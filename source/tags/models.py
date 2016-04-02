@@ -58,11 +58,11 @@ class TechnologyTag(TagBase):
     pass
     
 class TechnologyTaggedItem(GenericTaggedItemBase):
-    tag = models.ForeignKey(TechnologyTag, related_name="%(app_label)s_%(class)s_techtag_items")
+    tag = models.ForeignKey(TechnologyTag, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_techtag_items")
     
 class ConceptTag(TagBase):
     pass
 
 class ConceptTaggedItem(GenericTaggedItemBase):
-    tag = models.ForeignKey(ConceptTag, related_name="%(app_label)s_%(class)s_concepttag_items")
+    tag = models.ForeignKey(ConceptTag, on_delete=models.CASCADE, related_name="%(app_label)s_%(class)s_concepttag_items")
     
