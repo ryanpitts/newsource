@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.urlresolvers import resolve, reverse
-from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, Http404
+from django.http import HttpRequest, HttpResponse, HttpResponseForbidden, Http404, JsonResponse
 from django.utils.cache import get_cache_key
 from django.utils.decorators import method_decorator
 from django.utils.encoding import iri_to_uri
@@ -79,7 +79,7 @@ def get_url_cache_key(url, language=None, key_prefix=None):
 class ClearCache(View):
     def render_json_to_response(self, context):
         result = json.dumps(context, cls=LazyEncoder)
-        return HttpResponse(result, mimetype='application/javascript')
+        return JsonResponse(result, safe=False)
 
     @method_decorator(login_required)
     def get(self, request, *args, **kwargs):

@@ -3,7 +3,6 @@ from django.shortcuts import render_to_response
 from django.views.generic import ListView, DetailView
 
 from .models import Guide
-from source.utils.json import render_json_to_response
 
 
 class GuideList(ListView):

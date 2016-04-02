@@ -290,3 +290,4 @@ SLACK_TOKEN = env.str("SLACK_TOKEN", None)
 DEFAULT_IMAGE_SRC = 'img/missing.png'
 
 TIME_ZONE='America/Chicago'
+HTTP_PROTOCOL = 'https'

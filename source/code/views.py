@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import RequestContext
@@ -53,6 +54,7 @@ class CodeList(ListView):
             attach things like related names and urls. If we start doing more
             with providing JSON, we should definitly go full django-tastypie.
             '''
+            context['HTTP_PROTOCOL'] = getattr(settings, 'HTTP_PROTOCOL', 'https')
             if 'callback' in self.request.GET:
                 # provide jsonp support for requests
                 # with ?callback=foo paramater
@@ -61,7 +63,7 @@ class CodeList(ListView):
                 'code/code_list.json',
                 context,
                 context_instance = RequestContext(self.request),
-                mimetype='application/json'
+                content_type='application/json'
             )
         return super(CodeList, self).render_to_response(context)
 
