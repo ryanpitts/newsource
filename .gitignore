@@ -56,10 +56,14 @@ node_modules/
 .env
 
 # User-uploaded media
-newsource/media/
+source/media/
 
 # Hitch directory
 tests/.hitch
 
 # MailHog binary
 mailhog
+
+# testing files
+dump_*
+*.sqlite3
