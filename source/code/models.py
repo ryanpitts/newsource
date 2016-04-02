@@ -23,8 +23,8 @@ GITHUB_CLIENT_SECRET=settings.GITHUB_CLIENT_SECRET
 
 
 class LiveCodeManager(CachingManager):
-    def get_query_set(self):
-        return super(LiveCodeManager, self).get_query_set().filter(is_live=True)
+    def get_queryset(self):
+        return super(LiveCodeManager, self).get_queryset().filter(is_live=True)
 
 class Code(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -107,7 +107,7 @@ class Code(CachingMixin, models.Model):
         return [item for item in itertools.chain(self.technology_tags.all(), self.concept_tags.all())]
 
     def get_live_article_set(self):
-        return self.article_set.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now)
+        return self.article_set.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now())
 
     def get_live_organization_set(self):
         return self.organizations.filter(is_live=True)

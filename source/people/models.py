@@ -13,8 +13,8 @@ from source.base.utils import disable_for_loaddata
 from source.utils.caching import expire_page_cache
 
 class LivePersonManager(CachingManager):
-    def get_query_set(self):
-        return super(LivePersonManager, self).get_query_set().filter(is_live=True)
+    def get_queryset(self):
+        return super(LivePersonManager, self).get_queryset().filter(is_live=True)
 
 
 class Person(CachingMixin, models.Model):
@@ -71,10 +71,10 @@ class Person(CachingMixin, models.Model):
         return self.last_name[:1]
 
     def get_live_article_set(self):
-        return self.article_set.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now)
+        return self.article_set.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now())
 
     def get_live_article_authored_set(self):
-        return self.article_authors.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now)
+        return self.article_authors.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now())
 
     def get_live_organization_set(self):
         return self.organizations.filter(is_live=True)
@@ -102,8 +102,8 @@ class PersonLink(CachingMixin, models.Model):
 
 
 class LiveOrganizationManager(CachingManager):
-    def get_query_set(self):
-        return super(LiveOrganizationManager, self).get_query_set().filter(is_live=True)
+    def get_queryset(self):
+        return super(LiveOrganizationManager, self).get_queryset().filter(is_live=True)
 
 
 class Organization(CachingMixin, models.Model):
@@ -169,7 +169,7 @@ class Organization(CachingMixin, models.Model):
         return self.name.replace('The ', '')[:1]
         
     def get_live_article_set(self):
-        return self.article_set.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now)
+        return self.article_set.filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now())
         
     def get_live_person_set(self):
         return self.person_set.filter(is_live=True)

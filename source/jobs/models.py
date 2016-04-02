@@ -19,9 +19,9 @@ def get_today_plus_30():
     return datetime.now().date() + timedelta(days=30)
     
 class LiveJobManager(CachingManager):
-    def get_query_set(self):
+    def get_queryset(self):
         today = get_today()
-        return super(LiveJobManager, self).get_query_set().filter(
+        return super(LiveJobManager, self).get_queryset().filter(
             is_live=True, listing_start_date__lte=today, listing_end_date__gte=today
         )
 

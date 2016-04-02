@@ -15,8 +15,8 @@ from source.utils.caching import expire_page_cache
 
 
 class LiveGuideManager(CachingManager):
-    def get_query_set(self):
-        return super(LiveGuideManager, self).get_query_set().filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now())
+    def get_queryset(self):
+        return super(LiveGuideManager, self).get_queryset().filter(is_live=True, show_in_lists=True, pubdate__lte=datetime.now())
 
 class Guide(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -81,7 +81,7 @@ class Guide(CachingMixin, models.Model):
         return ''
 
     def get_live_article_set(self):
-        return self.guidearticle_set.filter(Q(article__is_live=True, article__pubdate__lte=datetime.now) | Q(article__isnull=True))
+        return self.guidearticle_set.filter(Q(article__is_live=True, article__pubdate__lte=datetime.now()) | Q(article__isnull=True))
 
     def save(self, *args, **kwargs):
         # clean up cover_color field, just in case

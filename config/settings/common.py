@@ -145,6 +145,7 @@ TEMPLATES = [
         'OPTIONS': {
             'debug': DEBUG,
             'match_extension': '.html',
+            'match_regex': r'^(?!admin/).*',
             'auto_reload': DEBUG,
             'extensions': DEFAULT_EXTENSIONS + [
                 'compressor.contrib.jinja2ext.CompressorExtension'
@@ -195,7 +196,7 @@ TEMPLATES = [
         },
     },
 ]
-KEEP_DJANGO_TEMPLATES = ['admin', 'debug_toolbar']
+KEEP_DJANGO_TEMPLATES = ['admin', 'debug_toolbar',]
 
 # STATIC FILE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -287,3 +288,5 @@ SLACK_TOKEN = env.str("SLACK_TOKEN", None)
 
 # sorl-thumbnail settings
 DEFAULT_IMAGE_SRC = 'img/missing.png'
+
+TIME_ZONE='America/Chicago'

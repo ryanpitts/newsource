@@ -18,8 +18,8 @@ from taggit.managers import TaggableManager
 
 
 class LiveArticleManager(CachingManager):
-    def get_query_set(self):
-        return super(LiveArticleManager, self).get_query_set().filter(is_live=True, pubdate__lte=datetime.now())
+    def get_queryset(self):
+        return super(LiveArticleManager, self).get_queryset().filter(is_live=True, pubdate__lte=datetime.now())
 
 class Article(CachingMixin, models.Model):
     created = models.DateTimeField(auto_now_add=True)
