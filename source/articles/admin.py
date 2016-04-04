@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Article, ArticleBlock, Section, Category
-from source.base.widgets import AdminImageMixin
+from sorl.thumbnail.admin import AdminImageMixin
 
 class ArticleBlockInline(AdminImageMixin, admin.StackedInline):
     model = ArticleBlock

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Code, CodeLink
-from source.base.widgets import AdminImageMixin
+from sorl.thumbnail.admin import AdminImageMixin
 
 class CodeLinkInline(admin.StackedInline):
     model = CodeLink

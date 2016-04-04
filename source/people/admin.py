@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Person, PersonLink, Organization, OrganizationLink
-from source.base.widgets import AdminImageMixin
+from sorl.thumbnail.admin import AdminImageMixin
 
 class PersonLinkInline(admin.StackedInline):
     model = PersonLink
