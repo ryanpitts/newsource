@@ -20,7 +20,7 @@
         {% for code in homepage_code_list %}
         <li>
             <a href="{{ code.get_absolute_url() }}">{{ code.name|smartypants }}</a>
-            {% with person_link_list = code.get_live_people_set() %}
+            {% with person_link_list = code.get_live_person_set() %}
             {% if person_link_list %}
             <span class="whoswho">
                 <i class="icon-user"></i>{% for person in person_link_list %}<a href="{{ person.get_absolute_url() }}">{{ person.name()|smartypants }}</a>{% if not loop.last %}, {% endif %}{% endfor %}

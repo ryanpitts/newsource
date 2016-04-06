@@ -34,7 +34,7 @@
 
 <div class="page-block">
     <div id="code-link-lists">
-        {% with person_link_list = code.get_live_people_set() %}
+        {% with person_link_list = code.get_live_person_set() %}
         {% include "people/_person_link_list.html" %}{% endwith %}
     
         {% with organization_link_list = code.get_live_organization_set() %}

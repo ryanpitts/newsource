@@ -108,7 +108,7 @@ class Article(CachingMixin, models.Model):
     def get_live_organization_set(self):
         return self.organizations.filter(is_live=True)
 
-    def get_live_people_set(self):
+    def get_live_person_set(self):
         return self.people.filter(is_live=True)
 
     def get_live_author_set(self):
@@ -200,7 +200,7 @@ def clear_caches_for_article(sender, instance, **kwargs):
         expire_page_cache(organization.get_absolute_url())
         
     # clear caches for related people
-    for person in instance.get_live_people_set():
+    for person in instance.get_live_person_set():
         expire_page_cache(person.get_absolute_url())
 
     # clear caches for related authors

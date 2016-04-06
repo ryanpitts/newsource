@@ -291,3 +291,5 @@ DEFAULT_IMAGE_SRC = 'img/missing.png'
 
 TIME_ZONE='America/Chicago'
 HTTP_PROTOCOL = 'https'
+
+THUMBNAIL_DEBUG = True

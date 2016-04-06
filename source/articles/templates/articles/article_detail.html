@@ -77,7 +77,7 @@
             {% with code_link_list = article.get_live_code_set() %}
             {% include "code/_code_link_list.html" %}{% endwith %}
 
-            {% with person_link_list = article.get_live_people_set() %}
+            {% with person_link_list = article.get_live_person_set() %}
             {% include "people/_person_link_list.html" %}{% endwith %}
 
             {% with organization_link_list = article.get_live_organization_set() %}
@@ -139,7 +139,7 @@
         {% with code_link_list = article.get_live_code_set() %}
         {% include "code/_code_link_list.html" %}{% endwith %}
 
-        {% with person_link_list = article.get_live_people_set() %}
+        {% with person_link_list = article.get_live_person_set() %}
         {% include "people/_person_link_list.html" %}{% endwith %}
 
         {% with organization_link_list = article.get_live_organization_set() %}

@@ -4,7 +4,7 @@
     {% if article.image %}<a href="{{ article.get_absolute_url() }}"><img class="list-thumbnail" src="{{ MEDIA_URL }}{{ thumbnail(article.image, "300x240", crop="center") }}" alt="{{ article.title }}" onerror="this.style.display='none'"></a>{% endif %}
     <ul class="link-list link-list-inline">
         {% if article.get_live_author_set().exists() %}<li>{% with author_list = article.get_live_author_set() %}{% include "articles/_article_author_list.html" %}{% endwith %}</li>{% endif %}
-        {% with person_link_list = article.get_live_people_set() %}
+        {% with person_link_list = article.get_live_person_set() %}
         {% include "people/_person_link_list_inline.html" %}{% endwith %}
         {% with organization_link_list = article.get_live_organization_set() %}
         {% include "people/_organization_link_list_inline.html" %}{% endwith %}
